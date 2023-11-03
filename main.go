@@ -10,8 +10,8 @@ import (
 
 func main() {
 	app := &cli.App{
-		Name:  "hugo helper",
-		Usage: "this is the hugo helper",
+		Name:  "utils",
+		Usage: "this is the utils cli app",
 		Action: func(*cli.Context) error {
 			fmt.Println("Hello world!")
 			return nil

@@ -1,4 +1,4 @@
-module github.com/matkv/hugo-helper
+module github.com/matkv/utils
 
 go 1.21.1
 
