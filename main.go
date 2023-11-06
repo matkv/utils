@@ -19,8 +19,14 @@ func main() {
 	app := &cli.App{
 		Name:  "utils",
 		Usage: "automating some personal tasks",
-		Action: func(*cli.Context) error {
-			fmt.Printf("Hello %s! Please choose the action:", user.Username)
+		Action: func(context *cli.Context) error {
+			args := context.Args()
+			if args.Len() > 0 {
+				fmt.Printf("Hello, your argument was: %q", args.Get(0))
+			} else {
+				fmt.Printf("Hello %s! Please choose the action:", user.Username)
+			}
+
 			return nil
 		},
 	}
