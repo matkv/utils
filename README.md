@@ -5,3 +5,7 @@ A CLI tool to make some common personal tasks easier. The first problem I want t
 Eventually I'll explore some other things that could be automated but I thought it would be nice to have all those things nicely bundled in a little CLI tool.
 
 For now, this is primarily a practice project for learning Go.
+
+## Learning Go - Jon Bodner
+
+Stopped at chapter 2 - numeric types - floating point types.
