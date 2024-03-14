@@ -36,6 +36,12 @@ func main() {
 	for i, action := range actions {
 		fmt.Printf("%d: %s\n", i, action.GetName())
 	}
+
+	fmt.Print("Enter the number corresponding to your selected action: ")
+
+	var selectedAction int
+	fmt.Scanln(&selectedAction)
+	fmt.Println("You selected:", actions[selectedAction].GetName())
 }
 
 func getCurrentUser() *user.User {
