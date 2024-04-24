@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"os"
 	"os/user"
 	"path/filepath"
@@ -18,12 +19,24 @@ func main() {
 	dotfilesPath = filepath.Join(home, "Documents/Code/dotfiles")
 
 	if len(os.Args) > 1 && os.Args[1] == "syncdotfiles" {
-		pullLatestDotfiles()
-		moveConfigFiles()
+		if dotfilesDirectoryExists() {
+			//pullLatestDotfiles()
+			moveConfigFiles()
+		}
 		return
 	}
 
 	printPossibleActions()
+}
+
+func dotfilesDirectoryExists() bool {
+	_, err := os.Stat(dotfilesPath)
+	if os.IsNotExist(err) {
+		fmt.Println("Dotfiles directory does not exist")
+		return false
+
+	}
+	return true
 }
 
 func pullLatestDotfiles() {
@@ -31,7 +44,6 @@ func pullLatestDotfiles() {
 }
 
 func moveConfigFiles() {
-
 	fmt.Println("Moving config files...")
 
 	copyWeztermConfig()
@@ -40,19 +52,64 @@ func moveConfigFiles() {
 }
 
 func copyWeztermConfig() {
-	panic("unimplemented")
+	weztermConfigPath := filepath.Join(home, ".wezterm.lua")
+	dotfilesWeztermConfigPath := filepath.Join(dotfilesPath, ".wezterm/wezterm.lua")
+
+	if configFileExists(weztermConfigPath) {
+		fmt.Println(weztermConfigPath)         // TEMP
+		fmt.Println(dotfilesWeztermConfigPath) // TEMP
+		//copyFile(weztermConfigPath, dotfilesWeztermConfigPath)
+	} else {
+		fmt.Println("Wezterm config file does not exist")
+	}
 }
 
 func copyVSCodeConfig() {
-	panic("unimplemented")
+	VSCodeSettingsPath := filepath.Join(home, "AppData/Roaming/Code/User/settings.json")
+	VSCodeKeybindingsPath := filepath.Join(home, "AppData/Roaming/Code/User/keybindings.json")
+
+	dotfilesVSCodeConfigPath := filepath.Join(dotfilesPath, ".config/Code/User")
+
+	if configFileExists(VSCodeSettingsPath) {
+		fmt.Println(VSCodeSettingsPath)       // TEMP
+		fmt.Println(dotfilesVSCodeConfigPath) // TEMP
+		//copyFile(VSCodeSettingsPath, dotfilesVSCodeConfigPath)
+	} else {
+		fmt.Println("VSCode settings file does not exist")
+	}
+
+	if configFileExists(VSCodeKeybindingsPath) {
+		fmt.Println(VSCodeKeybindingsPath)    // TEMP
+		fmt.Println(dotfilesVSCodeConfigPath) // TEMP
+		//copyFile(VSCodeKeybindingsPath, dotfilesVSCodeConfigPath)
+	} else {
+		fmt.Println("VSCode keybindings file does not exist")
+	}
 }
 
 func copyDarkReaderSettings() {
-	panic("unimplemented")
+	// TODO
 }
 
-func copyToDotfilesFolder() {
-	// TODO
+func copyFile(sourcePath string, destinationPath string) error {
+	sourceFile, err := os.Open(sourcePath)
+	if err != nil {
+		return err
+	}
+	defer sourceFile.Close()
+
+	destinationFile, err := os.Create(destinationPath)
+	if err != nil {
+		return err
+	}
+	defer destinationFile.Close()
+
+	_, err = io.Copy(destinationFile, sourceFile)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func configFileExists(path string) bool {
