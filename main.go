@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"os/exec"
 	"os/user"
 	"path/filepath"
 )
@@ -20,7 +21,7 @@ func main() {
 
 	if len(os.Args) > 1 && os.Args[1] == "syncdotfiles" {
 		if dotfilesDirectoryExists() {
-			//pullLatestDotfiles()
+			pullLatestDotfiles()
 			moveConfigFiles()
 		}
 		return
@@ -64,12 +65,11 @@ func moveConfigFiles() {
 
 func copyWeztermConfig() {
 	weztermConfigPath := filepath.Join(home, ".wezterm.lua")
-	dotfilesWeztermConfigPath := filepath.Join(dotfilesPath, ".wezterm/wezterm.lua")
+	dotfilesWeztermConfigPath := filepath.Join(dotfilesPath, ".wezterm/.wezterm.lua")
 
 	if configFileExists(weztermConfigPath) {
-		fmt.Println(weztermConfigPath)         // TEMP
-		fmt.Println(dotfilesWeztermConfigPath) // TEMP
-		//copyFile(weztermConfigPath, dotfilesWeztermConfigPath)
+		fmt.Println("Copying Wezterm config file")
+		copyFile(weztermConfigPath, dotfilesWeztermConfigPath)
 	} else {
 		fmt.Println("Wezterm config file does not exist")
 	}
@@ -79,20 +79,19 @@ func copyVSCodeConfig() {
 	VSCodeSettingsPath := filepath.Join(home, "AppData/Roaming/Code/User/settings.json")
 	VSCodeKeybindingsPath := filepath.Join(home, "AppData/Roaming/Code/User/keybindings.json")
 
-	dotfilesVSCodeConfigPath := filepath.Join(dotfilesPath, ".config/Code/User")
+	VSCodeSettingsInDotfiles := filepath.Join(dotfilesPath, ".config/Code/User/settings.json")
+	VSCodeKeybindingsInDotfiles := filepath.Join(dotfilesPath, ".config/Code/User/keybindings.json")
 
 	if configFileExists(VSCodeSettingsPath) {
-		fmt.Println(VSCodeSettingsPath)       // TEMP
-		fmt.Println(dotfilesVSCodeConfigPath) // TEMP
-		//copyFile(VSCodeSettingsPath, dotfilesVSCodeConfigPath)
+		fmt.Println("Copying VSCode settings file")
+		copyFile(VSCodeSettingsPath, VSCodeSettingsInDotfiles)
 	} else {
 		fmt.Println("VSCode settings file does not exist")
 	}
 
 	if configFileExists(VSCodeKeybindingsPath) {
-		fmt.Println(VSCodeKeybindingsPath)    // TEMP
-		fmt.Println(dotfilesVSCodeConfigPath) // TEMP
-		//copyFile(VSCodeKeybindingsPath, dotfilesVSCodeConfigPath)
+		fmt.Println("Copying VSCode keybindings file")
+		copyFile(VSCodeKeybindingsPath, VSCodeKeybindingsInDotfiles)
 	} else {
 		fmt.Println("VSCode keybindings file does not exist")
 	}
@@ -124,12 +123,8 @@ func copyFile(sourcePath string, destinationPath string) error {
 }
 
 func configFileExists(path string) bool {
-	_, err :=
-		os.Stat(path)
-	if os.IsNotExist(err) {
-		return false
-	}
-	return true
+	_, err := os.Stat(path)
+	return !os.IsNotExist(err)
 }
 
 func getCurrentUser() *user.User {
