@@ -40,7 +40,18 @@ func dotfilesDirectoryExists() bool {
 }
 
 func pullLatestDotfiles() {
-	panic("unimplemented")
+	fmt.Println("Pulling latest dotfiles...")
+
+	cmd := exec.Command("git", "pull")
+	cmd.Dir = dotfilesPath
+
+	err := cmd.Run()
+	if err != nil {
+		fmt.Println("Failed to pull latest dotfiles:", err)
+		return
+	}
+
+	fmt.Println("Dotfiles pulled successfully")
 }
 
 func moveConfigFiles() {
