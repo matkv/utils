@@ -19,12 +19,23 @@ func main() {
 	home = getCurrentUser().HomeDir
 	dotfilesPath = filepath.Join(home, "Documents/Code/dotfiles")
 
-	if len(os.Args) > 1 && os.Args[1] == "sync" {
-		if dotfilesDirectoryExists() {
-			pullLatestDotfiles()
-			moveConfigFiles()
+	if len(os.Args) > 1 {
+		if os.Args[1] == "pull" {
+			if dotfilesDirectoryExists() {
+				pullLatestDotfiles()
+			}
+
+			return
 		}
-		return
+
+		if os.Args[1] == "sync" {
+			if dotfilesDirectoryExists() {
+				pullLatestDotfiles()
+				moveConfigFiles()
+			}
+
+			return
+		}
 	}
 
 	printPossibleActions()
