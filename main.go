@@ -38,7 +38,7 @@ func main() {
 		}
 	}
 
-	fmt.Println("Please provide a valid command: pull or sync") // TEMP
+	StartUI()
 }
 
 func dotfilesDirectoryExists() bool {
