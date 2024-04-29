@@ -38,7 +38,7 @@ func main() {
 		}
 	}
 
-	printPossibleActions()
+	fmt.Println("Please provide a valid command: pull or sync") // TEMP
 }
 
 func dotfilesDirectoryExists() bool {
@@ -72,6 +72,7 @@ func moveConfigFiles() {
 	copyWeztermConfig()
 	copyVSCodeConfig()
 	copyDarkReaderSettings()
+	copyStreamLinkConfig()
 }
 
 func copyWeztermConfig() {
@@ -105,6 +106,17 @@ func copyVSCodeConfig() {
 		copyFile(VSCodeKeybindingsPath, VSCodeKeybindingsInDotfiles)
 	} else {
 		fmt.Println("VSCode keybindings file does not exist")
+	}
+}
+
+func copyStreamLinkConfig() {
+	streamlinkConfigPath := filepath.Join(home, "AppData/Roaming/streamlink/config")
+
+	if configFileExists(streamlinkConfigPath) {
+		fmt.Println("Copying Streamlink config file")
+		copyFile(streamlinkConfigPath, dotfilesPath)
+	} else {
+		fmt.Println("Streamlink config file does not exist")
 	}
 }
 
@@ -145,46 +157,4 @@ func getCurrentUser() *user.User {
 		return nil
 	}
 	return currentUser
-}
-
-type Action interface {
-	GetName() string
-}
-
-type (
-	CreateAction struct{}
-	DeleteAction struct{}
-	ListAction   struct{}
-)
-
-func (a *CreateAction) GetName() string {
-	return "Create"
-}
-
-func (a *DeleteAction) GetName() string {
-	return "Delete"
-}
-
-func (a *ListAction) GetName() string {
-	return "List"
-}
-
-func printPossibleActions() {
-
-	user := getCurrentUser()
-	fmt.Println("Current user:", user.Username)
-
-	fmt.Println("Please select one of the following options:")
-
-	// let the user select one out of several actions that are represented by a Action type
-	actions := []Action{&CreateAction{}, &DeleteAction{}, &ListAction{}}
-	for i, action := range actions {
-		fmt.Printf("%d: %s\n", i, action.GetName())
-	}
-
-	fmt.Print("Enter the number corresponding to your selected action: ")
-
-	var selectedAction int
-	fmt.Scanln(&selectedAction)
-	fmt.Println("You selected:", actions[selectedAction].GetName())
 }
