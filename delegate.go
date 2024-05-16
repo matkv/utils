@@ -11,9 +11,11 @@ func newItemDelegate(keys *delegateKeyMap) list.DefaultDelegate {
 
 	d.UpdateFunc = func(msg tea.Msg, m *list.Model) tea.Cmd {
 		var title string
+		var filterValue string
 
 		if i, ok := m.SelectedItem().(item); ok {
 			title = i.Title()
+			filterValue = i.FilterValue()
 		} else {
 			return nil
 		}
@@ -22,6 +24,20 @@ func newItemDelegate(keys *delegateKeyMap) list.DefaultDelegate {
 		case tea.KeyMsg:
 			switch {
 			case key.Matches(msg, keys.choose):
+
+				if filterValue == "Pull latest dotfiles" {
+					if dotfilesDirectoryExists() {
+						pullLatestDotfiles()
+					}
+				}
+
+				if filterValue == "Sync dotfiles" {
+					if dotfilesDirectoryExists() {
+						pullLatestDotfiles()
+						moveConfigFiles()
+					}
+				}
+
 				return m.NewStatusMessage(statusMessageStyle("You chose " + title))
 
 			case key.Matches(msg, keys.remove):
