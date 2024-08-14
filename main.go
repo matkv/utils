@@ -14,8 +14,6 @@ var (
 	dotfilesPath string
 )
 
-// TODO rewrite from the ground up and set up bubbletea slowly to really understand it
-
 func main() {
 
 	home = getCurrentUser().HomeDir
@@ -39,8 +37,6 @@ func main() {
 			return
 		}
 	}
-
-	StartUI()
 }
 
 func dotfilesDirectoryExists() bool {
