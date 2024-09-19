@@ -87,7 +87,7 @@ func ModifyContent(content string) string {
 
 		// Extract useful fields
 		if strings.HasPrefix(line, "booktitle:") {
-			title = strings.TrimSpace(strings.TrimPrefix(line, "booktitle:"))
+			title = strings.TrimSpace(strings.TrimPrefix(line, "booktitle:")) // TODO title has the "" in the output
 		} else if strings.HasPrefix(line, "author:") {
 			author = strings.TrimSpace(strings.TrimPrefix(line, "author:"))
 		} else if strings.HasPrefix(line, "date:") {
