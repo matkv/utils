@@ -13,19 +13,23 @@ func UpdateBookreviews(directory string) error {
 		return fmt.Errorf("failed to get current directory: %v", err)
 	}
 
-	dirPath := filepath.Join(cwd, directory)
+	if directory == "." {
+		directory = cwd
+	} else {
+		directory = filepath.Join(cwd, directory)
+	}
+
+	fmt.Printf("Processing directory: %s\n", directory)
 
 	// Check if the directory exists
-	if _, err := os.Stat(dirPath); os.IsNotExist(err) {
-		return fmt.Errorf("directory does not exist: %s", dirPath)
+	if _, err := os.Stat(directory); os.IsNotExist(err) {
+		return fmt.Errorf("directory does not exist: %s", directory)
 	}
 
 	return filepath.Walk(directory, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
 		}
-
-		fmt.Println("Processing directory...")
 
 		if !info.IsDir() && strings.HasSuffix(path, ".md") {
 			ProcessFile(path)
