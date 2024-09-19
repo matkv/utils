@@ -36,6 +36,19 @@ func main() {
 
 			return
 		}
+
+		if os.Args[1] == "bookreviews" {
+
+			if len(os.Args) < 3 {
+				fmt.Println("No directory provided")
+				return
+			}
+
+			err := UpdateBookreviews(os.Args[2])
+			if err != nil {
+				fmt.Printf("Error processing directory: %v\n", err)
+			}
+		}
 	}
 }
 
