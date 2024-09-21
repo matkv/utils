@@ -87,7 +87,7 @@ func ModifyContent(content string) string {
 
 		// Extract useful fields
 		if strings.HasPrefix(line, "booktitle:") {
-			title = strings.TrimSpace(strings.TrimPrefix(line, "booktitle:")) // TODO title has the "" in the output
+			title = strings.TrimSpace(strings.TrimPrefix(strings.Trim(line, "\""), "booktitle: \""))
 		} else if strings.HasPrefix(line, "author:") {
 			author = strings.TrimSpace(strings.TrimPrefix(line, "author:"))
 		} else if strings.HasPrefix(line, "date:") {
@@ -102,8 +102,8 @@ func ModifyContent(content string) string {
 
 	// Build new front matter
 	newContent.WriteString("+++\n")
-	newContent.WriteString(fmt.Sprintf("title = '%s'\n", title))
-	newContent.WriteString(fmt.Sprintf("bookauthor = '%s'\n", author))
+	newContent.WriteString(fmt.Sprintf("title = \"%s\"\n", title))
+	newContent.WriteString(fmt.Sprintf("bookauthor = \"%s\"\n", author))
 	newContent.WriteString(fmt.Sprintf("date = %s\n", date))
 	newContent.WriteString(fmt.Sprintf("rating = %d\n", ratingStars))
 	newContent.WriteString("favorite = false\n") // Default favorite value
