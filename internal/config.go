@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os/user"
+	"path/filepath"
 
 	"gopkg.in/yaml.v2"
 )
@@ -25,6 +26,8 @@ func LoadConfig(filePath string) (*Config, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	config.DotfilesPath = filepath.Join(config.Home, config.DotfilesPath)
 
 	return &config, nil
 }
