@@ -33,7 +33,7 @@ func UpdateBookreviews(directory string) error {
 		}
 
 		if !info.IsDir() && strings.HasSuffix(path, ".md") {
-			err := ProcessFile(path)
+			err := processFile(path)
 
 			if err != nil {
 				fmt.Printf("Failed to process file: %s %s  \n", path, err)
@@ -43,14 +43,14 @@ func UpdateBookreviews(directory string) error {
 	})
 }
 
-func ProcessFile(path string) error {
+func processFile(path string) error {
 	// Read file content
 	content, err := os.ReadFile(path)
 	if err != nil {
 		return fmt.Errorf("failed to read file: %v", err)
 	}
 
-	modifiedContent := ModifyContent(string(content))
+	modifiedContent := modifyContent(string(content))
 
 	newFolder := "processed_reviews"
 	if _, err := os.Stat(newFolder); os.IsNotExist(err) {
@@ -72,7 +72,7 @@ func ProcessFile(path string) error {
 	return nil
 }
 
-func ModifyContent(content string) string {
+func modifyContent(content string) string {
 	var newContent strings.Builder
 
 	scanner := bufio.NewScanner(strings.NewReader(content))
