@@ -1,4 +1,4 @@
-package main
+package hugotools
 
 import (
 	"bufio"
@@ -7,6 +7,10 @@ import (
 	"path/filepath"
 	"strings"
 )
+
+func Hello() {
+	fmt.Println("Hello from book reviews converter!")
+}
 
 func UpdateBookreviews(directory string) error {
 	cwd, err := os.Getwd()

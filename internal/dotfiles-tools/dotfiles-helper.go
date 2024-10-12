@@ -1,7 +1,9 @@
 package dotfilestools
 
-func Hello() string {
-	return "Hello from dotfiles helper!"
+import "fmt"
+
+func Hello() {
+	fmt.Println("Hello from dotfiles tools.")
 }
 
 // func dotfilesDirectoryExists() bool {
