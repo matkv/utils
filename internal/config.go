@@ -3,6 +3,7 @@ package config
 import (
 	"fmt"
 	"io/ioutil"
+	"os"
 	"os/user"
 	"path/filepath"
 
@@ -14,8 +15,15 @@ type Config struct {
 	DotfilesPath string `yaml:"dotfilesPath"`
 }
 
-func LoadConfig(filePath string) (*Config, error) {
-	// Read the YAML file
+func LoadConfig() (*Config, error) {
+	exePath, err := os.Executable()
+	if err != nil {
+		return nil, err
+	}
+
+	exeDir := filepath.Dir(exePath)
+	filePath := filepath.Join(exeDir, "config", "config.yaml")
+
 	data, err := ioutil.ReadFile(filePath)
 	if err != nil {
 		return nil, err

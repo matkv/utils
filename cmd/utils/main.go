@@ -50,7 +50,7 @@ func readUserInput() {
 }
 
 func loadConfig() *config.Config {
-	cfg, err := config.LoadConfig("./config/config.yaml")
+	cfg, err := config.LoadConfig()
 	if err != nil {
 		fmt.Println("Error:", err)
 	}
