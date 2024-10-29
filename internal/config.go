@@ -2,7 +2,6 @@ package config
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 	"os/user"
 	"path/filepath"
@@ -24,7 +23,7 @@ func LoadConfig() (*Config, error) {
 	exeDir := filepath.Dir(exePath)
 	filePath := filepath.Join(exeDir, "config", "config.yaml")
 
-	data, err := ioutil.ReadFile(filePath)
+	data, err := os.ReadFile(filePath)
 	if err != nil {
 		return nil, err
 	}

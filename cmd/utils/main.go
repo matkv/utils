@@ -55,6 +55,8 @@ func loadConfig() *config.Config {
 		fmt.Println("Error:", err)
 	}
 
+	// TODO these directories are wrong when running in debug mode in VSCode
+
 	fmt.Println("Home:", cfg.Home)
 	fmt.Println("Dotfiles path:", cfg.DotfilesPath)
 
