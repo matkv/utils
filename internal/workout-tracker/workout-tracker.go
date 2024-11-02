@@ -210,18 +210,20 @@ func habitsJSONHandler(w http.ResponseWriter, r *http.Request) {
 
 func generateGraphData(habitID string) []Cell {
 	var cells []Cell
-	startDate := time.Now().AddDate(0, 0, -365) // Last 365 days
+	today := time.Now()
 
-	// Adjust startDate to the most recent Monday
+	// Calculate the start date as the most recent Monday 52 weeks ago
+	startDate := today.AddDate(0, 0, -52*7)
 	for startDate.Weekday() != time.Monday {
-		startDate = startDate.AddDate(0, 0, -1)
+		startDate = startDate.AddDate(0, 0, 1)
 	}
 
-	for i := 0; i < 365; i++ {
-		date := startDate.AddDate(0, 0, i)
+	// Generate cells for each day up to today
+	for date := startDate; date.Before(today.AddDate(0, 0, 1)); date = date.AddDate(0, 0, 1) {
 		day := date.Weekday().String()[0:1] // Get the first letter of the day
 		formattedDate := date.Format("2006-01-02")
 		completed := false
+
 		for _, completion := range data.Completions {
 			if completion.AmountOfCompletions > 0 {
 				completionDate, _ := time.Parse(time.RFC3339, completion.Date)
@@ -232,18 +234,37 @@ func generateGraphData(habitID string) []Cell {
 				}
 			}
 		}
+
 		cells = append(cells, Cell{Completed: completed, Day: day, Date: formattedDate})
 	}
 
-	// Reorder cells to ensure all Mondays are in the first row, all Tuesdays in the second row, and so on
+	// Add dummy cells for future days in the current week
+	for i := int(today.Weekday()) + 1; i < 7; i++ {
+		day := time.Weekday(i).String()[0:1]
+		date := today.AddDate(0, 0, i-int(today.Weekday())).Format("2006-01-02")
+		cells = append(cells, Cell{Completed: false, Day: day, Date: date})
+	}
+
+	// Log the number of cells generated and their details for debugging
+	fmt.Printf("Total cells generated: %d\n", len(cells))
+	for _, cell := range cells {
+		fmt.Printf("Cell - Completed: %v, Day: '%s', Date: '%s'\n", cell.Completed, cell.Day, cell.Date)
+	}
+
+	// Ensure each row represents a week, reordering cells to start each row with Monday
 	var reorderedCells []Cell
 	for row := 0; row < 7; row++ {
-		for col := 0; col < 52; col++ {
+		for col := 0; col < (len(cells)+6)/7; col++ { // Calculate the number of columns based on total cells
 			index := col*7 + row
 			if index < len(cells) {
 				reorderedCells = append(reorderedCells, cells[index])
 			}
 		}
+	}
+
+	// Ensure we have 52 weeks by filling with empty cells if necessary
+	for len(reorderedCells) < 52*7 {
+		reorderedCells = append(reorderedCells, Cell{Completed: false, Day: "", Date: ""})
 	}
 
 	return reorderedCells
