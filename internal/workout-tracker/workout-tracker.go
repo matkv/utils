@@ -66,7 +66,99 @@ func Hello() {
 
 func GenerateWorkoutGraph() {
 	loadJSONFile()
+	exportHTMLFile()
 	startWebServer()
+}
+
+func exportHTMLFile() {
+	tmpl := `
+	<!DOCTYPE html>
+	<html>
+	<head>
+		<title>Habits</title>
+		<style>
+			body {
+				font-family: Arial, sans-serif;
+			}
+			.graph {
+				display: grid;
+				grid-template-columns: repeat(52, 20px); /* 52 columns for weeks in a year */
+				grid-template-rows: repeat(7, 20px);     /* 7 rows for days in a week */
+				gap: 2px;
+			}
+			.cell {
+				width: 20px;
+				height: 20px;
+				background-color: #ebedf0;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				font-size: 10px;
+				position: relative;
+				border-radius: 4px; /* Make the squares a bit round */
+			}
+			.cell.completed {
+				background-color: #4caf50;
+			}
+			.cell:hover::after {
+				content: attr(data-date);
+				position: absolute;
+				bottom: 100%;
+				left: 50%;
+				transform: translateX(-50%);
+				background-color: #333;
+				color: #fff;
+				padding: 2px 5px;
+				border-radius: 3px;
+				white-space: nowrap;
+				font-size: 10px;
+				z-index: 1;
+			}
+		</style>
+	</head>
+	<body>
+		<h2>Strength Workout</h2>
+		<div class="graph">
+			{{range .StrengthWorkout}}
+			<div class="cell {{if .Completed}}completed{{end}}" data-date="{{.Date}}"></div>
+			{{end}}
+		</div>
+		<h2>Cardio Workout</h2>
+		<div class="graph">
+			{{range .CardioWorkout}}
+			<div class="cell {{if .Completed}}completed{{end}}" data-date="{{.Date}}"></div>
+			{{end}}
+		</div>
+	</body>
+	</html>
+	`
+	type GraphData struct {
+		StrengthWorkout []Cell
+		CardioWorkout   []Cell
+	}
+
+	graphData := GraphData{
+		StrengthWorkout: generateGraphData("e86e75dc-cc88-426d-83c7-c986c624c3ac"),
+		CardioWorkout:   generateGraphData("87872f2a-b5f0-41b3-8d42-65466f2324b3"),
+	}
+
+	t, err := template.New("habits").Parse(tmpl)
+	if err != nil {
+		fmt.Println("Error parsing template:", err)
+		return
+	}
+
+	file, err := os.Create("workout_tracker.html")
+	if err != nil {
+		fmt.Println("Error creating file:", err)
+		return
+	}
+	defer file.Close()
+
+	err = t.Execute(file, graphData)
+	if err != nil {
+		fmt.Println("Error executing template:", err)
+	}
 }
 
 func loadJSONFile() {
@@ -120,6 +212,9 @@ func habitsHandler(w http.ResponseWriter, r *http.Request) {
 	<head>
 		<title>Habits</title>
 		<style>
+			body {
+				font-family: Arial, sans-serif;
+			}
 			.graph {
 				display: grid;
 				grid-template-columns: repeat(52, 20px); /* 52 columns for weeks in a year */
@@ -135,6 +230,7 @@ func habitsHandler(w http.ResponseWriter, r *http.Request) {
 				justify-content: center;
 				font-size: 10px;
 				position: relative;
+				border-radius: 4px; /* Make the squares a bit round */
 			}
 			.cell.completed {
 				background-color: #4caf50;
@@ -156,35 +252,27 @@ func habitsHandler(w http.ResponseWriter, r *http.Request) {
 		</style>
 	</head>
 	<body>
-		<h1>Habits</h1>
-		<ul>
-			{{range .Habits}}
-			<li>{{.Name}}: {{.Description}}</li>
-			{{end}}
-		</ul>
 		<h2>Strength Workout</h2>
 		<div class="graph">
 			{{range .StrengthWorkout}}
-			<div class="cell {{if .Completed}}completed{{end}}" data-date="{{.Date}}">{{.Day}}</div>
+			<div class="cell {{if .Completed}}completed{{end}}" data-date="{{.Date}}"></div>
 			{{end}}
 		</div>
 		<h2>Cardio Workout</h2>
 		<div class="graph">
 			{{range .CardioWorkout}}
-			<div class="cell {{if .Completed}}completed{{end}}" data-date="{{.Date}}">{{.Day}}</div>
+			<div class="cell {{if .Completed}}completed{{end}}" data-date="{{.Date}}"></div>
 			{{end}}
 		</div>
 	</body>
 	</html>
 	`
 	type GraphData struct {
-		Habits          []Habit
 		StrengthWorkout []Cell
 		CardioWorkout   []Cell
 	}
 
 	graphData := GraphData{
-		Habits:          data.Habits,
 		StrengthWorkout: generateGraphData("e86e75dc-cc88-426d-83c7-c986c624c3ac"),
 		CardioWorkout:   generateGraphData("87872f2a-b5f0-41b3-8d42-65466f2324b3"),
 	}
