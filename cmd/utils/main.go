@@ -6,11 +6,16 @@ import (
 
 	config "github.com/matkv/utils/internal"
 	dotfilestools "github.com/matkv/utils/internal/dotfiles-tools"
-	hugoTools "github.com/matkv/utils/internal/hugo-tools"
+	hugotools "github.com/matkv/utils/internal/hugo-tools"
+	workouttracker "github.com/matkv/utils/internal/workout-tracker"
 )
 
 func main() {
 	printHellos()
+
+	workouttracker.GenerateWorkoutGraph()
+
+	return // temp
 	config := loadConfig()
 
 	dotfilestools.Config = config
@@ -26,7 +31,7 @@ func main() {
 				fmt.Println("Please provide a directory")
 				return
 			}
-			err := hugoTools.UpdateBookreviews(os.Args[2])
+			err := hugotools.UpdateBookreviews(os.Args[2])
 			if err != nil {
 				fmt.Printf("Error processing directory: %v\n", err)
 			}
@@ -55,5 +60,6 @@ func loadConfig() *config.Config {
 func printHellos() {
 	config.PrintCurrentUserName()
 	dotfilestools.Hello()
-	hugoTools.Hello()
+	hugotools.Hello()
+	workouttracker.Hello()
 }
