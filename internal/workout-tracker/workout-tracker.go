@@ -3,7 +3,9 @@ package workouttracker
 import (
 	"encoding/json"
 	"fmt"
+	"html/template"
 	"io"
+	"net/http"
 	"os"
 )
 
@@ -55,12 +57,15 @@ type HabitKitData struct {
 	Reminders   []Reminder   `json:"reminders"`
 }
 
+var data HabitKitData
+
 func Hello() {
 	fmt.Println("Hello from workout tracker!")
 }
 
 func GenerateWorkoutGraph() {
 	loadJSONFile()
+	startWebServer()
 }
 
 func loadJSONFile() {
@@ -81,7 +86,6 @@ func loadJSONFile() {
 	}
 
 	// Unmarshal the JSON data into the structs
-	var data HabitKitData
 	err = json.Unmarshal(byteValue, &data)
 	if err != nil {
 		fmt.Println("Error unmarshalling JSON:", err)
@@ -90,4 +94,50 @@ func loadJSONFile() {
 
 	// Print the data to verify
 	fmt.Printf("%+v\n", data)
+}
+
+func startWebServer() {
+	http.HandleFunc("/habits", habitsHandler)
+	http.HandleFunc("/habits/json", habitsJSONHandler)
+	fmt.Println("Starting server at :8080")
+	err := http.ListenAndServe(":8080", nil)
+	if err != nil {
+		fmt.Println("Error starting server:", err)
+	}
+}
+
+func habitsHandler(w http.ResponseWriter, r *http.Request) {
+	tmpl := `
+	<!DOCTYPE html>
+	<html>
+	<head>
+		<title>Habits</title>
+	</head>
+	<body>
+		<h1>Habits</h1>
+		<ul>
+			{{range .Habits}}
+			<li>{{.Name}}: {{.Description}}</li>
+			{{end}}
+		</ul>
+	</body>
+	</html>
+	`
+	t, err := template.New("habits").Parse(tmpl)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	err = t.Execute(w, data)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+}
+
+func habitsJSONHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	err := json.NewEncoder(w).Encode(data)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
 }
