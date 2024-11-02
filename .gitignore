@@ -19,5 +19,5 @@
 
 # Go workspace file
 go.work
-
-/internal/workout-tracker/habitkit-data/habitkit_export.json
+internal/workout-tracker/habitkit-data/habitkit_export.json
+cmd/utils/workout_tracker.html
