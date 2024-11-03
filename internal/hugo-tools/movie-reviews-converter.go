@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -27,10 +28,13 @@ func CreateMovieReviews() error {
 
 	for _, review := range reviews {
 		fmt.Printf("Title: %s, Date: %s, Rating: %d, Year: %d, Link: %s, Favorite: %t\n", review.Title, review.Date, review.Rating, review.Year, review.Link, review.Favorite)
+		err := createMarkdownFile(review)
+		if err != nil {
+			fmt.Printf("Error creating markdown file for %s: %v\n", review.Title, err)
+		}
 	}
 
 	return nil
-	// TODO create markdown files
 }
 
 func readCSVFile(filePath string) ([]MovieReview, error) {
@@ -84,4 +88,34 @@ func readCSVFile(filePath string) ([]MovieReview, error) {
 	}
 
 	return reviews, nil
+}
+
+func createMarkdownFile(review MovieReview) error {
+	content := fmt.Sprintf(`+++
+title = "%s"
+date = "%s"
+rating = %d
+year = %d
+link = "%s"
+favorite = %t
++++
+`, review.Title, review.Date, review.Rating, review.Year, review.Link, review.Favorite)
+
+	exportDir := "export"
+	if _, err := os.Stat(exportDir); os.IsNotExist(err) {
+		err = os.Mkdir(exportDir, 0755)
+		if err != nil {
+			return err
+		}
+	}
+
+	fileName := strings.ToLower(strings.ReplaceAll(review.Title, " ", "-"))
+	filePath := fmt.Sprintf("%s/%s.md", exportDir, fileName)
+	err := os.WriteFile(filePath, []byte(content), 0644)
+	if err != nil {
+		return err
+	}
+
+	fmt.Printf("Created markdown file: %s\n", filePath)
+	return nil
 }
