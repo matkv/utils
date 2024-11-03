@@ -13,7 +13,8 @@ import (
 func main() {
 	printHellos()
 
-	workouttracker.GenerateWorkoutGraph()
+	// workouttracker.GenerateWorkoutGraph()
+	hugotools.CreateMovieReviews()
 
 	return // temp
 	config := loadConfig()
