@@ -14,7 +14,7 @@ import (
 
 func main() {
 
-	p := tea.NewProgram(ui.Model{})
+	p := tea.NewProgram(ui.NewModel(), tea.WithAltScreen())
 	if _, err := p.Run(); err != nil {
 		fmt.Fprintf(os.Stderr, "Error starting program: %v", err)
 		os.Exit(1)

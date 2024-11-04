@@ -1,31 +1,39 @@
 package ui
 
 import (
-	"fmt"
-
+	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 )
 
-var (
-	titleStyle = lipgloss.NewStyle().
-			Bold(true).
-			Foreground(lipgloss.Color("205")).
-			Border(lipgloss.RoundedBorder()).
-			BorderForeground(lipgloss.Color("62")). // A darker color for the border
-			Padding(1, 2)
+var docStyle = lipgloss.NewStyle().Margin(1, 2)
 
-	countStyle = lipgloss.NewStyle().
-			Padding(0, 1).
-			Margin(1, 0).
-			Background(lipgloss.Color("63")).
-			Foreground(lipgloss.Color("230")).
-			Border(lipgloss.ThickBorder()).
-			BorderForeground(lipgloss.Color("63"))
-)
+type item struct {
+	title, desc string
+}
+
+func (i item) Title() string       { return i.title }
+func (i item) Description() string { return i.desc }
+func (i item) FilterValue() string { return i.title }
 
 type Model struct {
 	count int
+	list  list.Model
+}
+
+func NewModel() Model {
+	items := make([]list.Item, len(setUpOptions()))
+	for i, option := range setUpOptions() {
+		items[i] = option
+	}
+
+	// Create a new list model and set the items and title
+	l := list.New(items, list.NewDefaultDelegate(), 0, 0)
+	l.Title = "Options"
+
+	return Model{
+		list: l,
+	}
 }
 
 func (m Model) Init() tea.Cmd {
@@ -35,26 +43,27 @@ func (m Model) Init() tea.Cmd {
 func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
-		switch msg.String() {
-		case "q", "esc", "ctrl+c":
+		if msg.String() == "ctrl+c" {
 			return m, tea.Quit
-		case "up", "k":
-			m.count++
-		case "down", "j":
-			m.count--
 		}
+	case tea.WindowSizeMsg:
+		h, v := docStyle.GetFrameSize()
+		m.list.SetSize(msg.Width-h, msg.Height-v)
 	}
-	return m, nil
+
+	var cmd tea.Cmd
+	m.list, cmd = m.list.Update(msg)
+	return m, cmd
 }
 
 func (m Model) View() string {
-	title := titleStyle.Render("Counter")
-	count := countStyle.Render(fmt.Sprintf("Count: %d", m.count))
+	return docStyle.Render(m.list.View())
+}
 
-	return fmt.Sprintf(
-		"%s\n\n%s\n\n%s",
-		title,
-		count,
-		"Press up/down to increase/decrease. Press q to quit.",
-	)
+func setUpOptions() []item {
+	return []item{
+		{"Pull latest dotfiles", "Pull the latest dotfiles from the remote repository"},
+		{"Sync dotfiles", "Move the config files to the correct locations"},
+		{"Update book reviews", "Update the book reviews in the Hugo site"},
+	}
 }
