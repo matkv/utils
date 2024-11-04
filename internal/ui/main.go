@@ -1,6 +1,8 @@
 package ui
 
 import (
+	"fmt"
+
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
@@ -17,8 +19,7 @@ func (i item) Description() string { return i.desc }
 func (i item) FilterValue() string { return i.title }
 
 type Model struct {
-	count int
-	list  list.Model
+	list list.Model
 }
 
 func NewModel() Model {
@@ -29,7 +30,7 @@ func NewModel() Model {
 
 	// Create a new list model and set the items and title
 	l := list.New(items, list.NewDefaultDelegate(), 0, 0)
-	l.Title = "Options"
+	l.Title = "utils"
 
 	return Model{
 		list: l,
@@ -43,8 +44,14 @@ func (m Model) Init() tea.Cmd {
 func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
-		if msg.String() == "ctrl+c" {
+		switch msg.String() {
+		case "ctrl+c":
 			return m, tea.Quit
+		case "enter":
+			// Get the selected item and set the message
+			if selectedItem, ok := m.list.SelectedItem().(item); ok {
+				m.list.Title = fmt.Sprintf("utils | You selected: %s", selectedItem.Title())
+			}
 		}
 	case tea.WindowSizeMsg:
 		h, v := docStyle.GetFrameSize()
