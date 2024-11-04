@@ -14,7 +14,7 @@ import (
 
 func main() {
 
-	p := tea.NewProgram(ui.NewModel(), tea.WithAltScreen())
+	p := tea.NewProgram(ui.NewModel())
 	if _, err := p.Run(); err != nil {
 		fmt.Fprintf(os.Stderr, "Error starting program: %v", err)
 		os.Exit(1)
@@ -28,29 +28,7 @@ func main() {
 
 	return // temp
 	config := loadConfig()
-
 	dotfilestools.Config = config
-
-	if len(os.Args) > 1 {
-		switch os.Args[1] {
-		case "pull":
-			dotfilestools.PullLatesDotfiles()
-		case "sync":
-			dotfilestools.MoveConfigFiles()
-		case "bookreviews":
-			if len(os.Args) < 3 {
-				fmt.Println("Please provide a directory")
-				return
-			}
-			err := hugotools.UpdateBookreviews(os.Args[2])
-			if err != nil {
-				fmt.Printf("Error processing directory: %v\n", err)
-			}
-		default:
-			fmt.Println("Unknown command")
-		}
-		return
-	}
 }
 
 func loadConfig() *config.Config {
