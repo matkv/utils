@@ -4,13 +4,23 @@ import (
 	"fmt"
 	"os"
 
+	tea "github.com/charmbracelet/bubbletea"
 	config "github.com/matkv/utils/internal"
 	dotfilestools "github.com/matkv/utils/internal/dotfiles-tools"
 	hugotools "github.com/matkv/utils/internal/hugo-tools"
+	"github.com/matkv/utils/internal/ui"
 	workouttracker "github.com/matkv/utils/internal/workout-tracker"
 )
 
 func main() {
+
+	p := tea.NewProgram(ui.Model{})
+	if _, err := p.Run(); err != nil {
+		fmt.Fprintf(os.Stderr, "Error starting program: %v", err)
+		os.Exit(1)
+	}
+
+	return // TEMP
 	printHellos()
 
 	// workouttracker.GenerateWorkoutGraph()
