@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 
+	dotfilestools "github.com/matkv/utils/internal/dotfiles-tools"
 	"github.com/spf13/cobra"
 )
 
@@ -23,6 +24,7 @@ to quickly create a Cobra application.`,
 
 func init() {
 	rootCmd.AddCommand(dotfilesCmd)
+	dotfilestools.Hello()
 
 	// Here you will define your flags and configuration settings.
 

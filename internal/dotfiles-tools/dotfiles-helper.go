@@ -6,22 +6,34 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
-
-	config "github.com/matkv/utils/internal"
 )
+
+// TEMP -> use viper for this
+type Config struct {
+	Home         string
+	DotfilesPath string
+}
+
+var config Config
+
+func init() {
+	config = Config{
+		Home:         os.Getenv("HOME"),
+		DotfilesPath: "/path/to/dotfiles",
+	}
+}
 
 func Hello() {
 	fmt.Println("Hello from dotfiles tools.")
 }
 
-var Config *config.Config
-
 func PullLatesDotfiles() {
-	if dotfilesDirectoryExists(Config.DotfilesPath) {
+
+	if dotfilesDirectoryExists(config.DotfilesPath) {
 		fmt.Println("Pulling latest dotfiles...")
 
 		cmd := exec.Command("git", "pull")
-		cmd.Dir = Config.DotfilesPath
+		cmd.Dir = config.DotfilesPath
 
 		err := cmd.Run()
 		if err != nil {
@@ -43,8 +55,8 @@ func MoveConfigFiles() {
 }
 
 func copyWeztermConfig() {
-	weztermConfigPath := filepath.Join(Config.Home, ".wezterm.lua")
-	dotfilesWeztermConfigPath := filepath.Join(Config.DotfilesPath, ".wezterm/.wezterm.lua")
+	weztermConfigPath := filepath.Join(config.Home, ".wezterm.lua")
+	dotfilesWeztermConfigPath := filepath.Join(config.DotfilesPath, ".wezterm/.wezterm.lua")
 
 	if configFileExists(weztermConfigPath) {
 		fmt.Println("Copying Wezterm config file")
@@ -55,11 +67,11 @@ func copyWeztermConfig() {
 }
 
 func copyVSCodeConfig() {
-	VSCodeSettingsPath := filepath.Join(Config.Home, "AppData/Roaming/Code/User/settings.json")
-	VSCodeKeybindingsPath := filepath.Join(Config.Home, "AppData/Roaming/Code/User/keybindings.json")
+	VSCodeSettingsPath := filepath.Join(config.Home, "AppData/Roaming/Code/User/settings.json")
+	VSCodeKeybindingsPath := filepath.Join(config.Home, "AppData/Roaming/Code/User/keybindings.json")
 
-	VSCodeSettingsInDotfiles := filepath.Join(Config.DotfilesPath, ".config/Code/User/settings.json")
-	VSCodeKeybindingsInDotfiles := filepath.Join(Config.DotfilesPath, ".config/Code/User/keybindings.json")
+	VSCodeSettingsInDotfiles := filepath.Join(config.DotfilesPath, ".config/Code/User/settings.json")
+	VSCodeKeybindingsInDotfiles := filepath.Join(config.DotfilesPath, ".config/Code/User/keybindings.json")
 
 	if configFileExists(VSCodeSettingsPath) {
 		fmt.Println("Copying VSCode settings file")
@@ -77,11 +89,11 @@ func copyVSCodeConfig() {
 }
 
 func copyStreamLinkConfig() {
-	streamlinkConfigPath := filepath.Join(Config.Home, "AppData/Roaming/streamlink/config")
+	streamlinkConfigPath := filepath.Join(config.Home, "AppData/Roaming/streamlink/config")
 
 	if configFileExists(streamlinkConfigPath) {
 		fmt.Println("Copying Streamlink config file")
-		copyFile(streamlinkConfigPath, Config.DotfilesPath)
+		copyFile(streamlinkConfigPath, config.DotfilesPath)
 	} else {
 		fmt.Println("Streamlink config file does not exist")
 	}
