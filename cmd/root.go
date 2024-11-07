@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -45,14 +46,34 @@ func initConfig() {
 		os.Exit(1)
 	}
 
-	viper.SetConfigName(".utils")
+	configPath := filepath.Join(home, ".config", "utils")
+	viper.AddConfigPath(configPath)
+	viper.SetConfigName("config")
 	viper.SetConfigType("yaml")
-	viper.AddConfigPath(home)
 
 	viper.AutomaticEnv()
 
 	if err := viper.ReadInConfig(); err != nil {
-		fmt.Println("Failed to read config file:", err)
+		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
+			createConfigFile(configPath)
+		} else {
+			fmt.Println("Failed to read config file:", err)
+			os.Exit(1)
+		}
+	}
+}
+
+func createConfigFile(configPath string) {
+	configFilePath := filepath.Join(configPath, "config.yaml")
+	if err := os.MkdirAll(filepath.Dir(configFilePath), os.ModePerm); err != nil {
+		fmt.Println("Failed to create config directory:", err)
 		os.Exit(1)
 	}
+	file, err := os.Create(configFilePath)
+	if err != nil {
+		fmt.Println("Failed to create config file:", err)
+		os.Exit(1)
+	}
+	defer file.Close()
+	fmt.Println("Created new config file at:", configFilePath)
 }
