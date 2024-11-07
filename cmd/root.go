@@ -61,6 +61,15 @@ func initConfig() {
 			os.Exit(1)
 		}
 	}
+
+	configType := viper.GetString("configType")
+	settings := viper.Sub(configType)
+	if settings == nil {
+		fmt.Println("No configuration found for type:", configType)
+		os.Exit(1)
+	}
+
+	viper.MergeConfigMap(settings.AllSettings())
 }
 
 func createConfigFile(configPath string) {
