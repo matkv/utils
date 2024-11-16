@@ -10,13 +10,8 @@ import (
 // dotfilesCmd represents the dotfiles command
 var dotfilesCmd = &cobra.Command{
 	Use:   "dotfiles",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "Tools to manage my dotfiles.",
+	Long:  `Tools to manage my dotfiles. For example moving dotfiles to the correct location on Windows so I can update my dotfiles git repository more easily.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("dotfiles called")
 	},

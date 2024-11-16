@@ -11,19 +11,12 @@ import (
 
 var rootCmd = &cobra.Command{
 	Use:   "utils",
-	Short: "A brief description of your application",
-	Long:  `A longer description that spans multiple lines and likely contains examples and usage of using your application.`,
+	Short: "CLI tool to automate some personal tasks",
+	Long:  `CLI tool to automate some personal tasks. Some of the tasks include managing dotfiles, managing my hugo website and updating my workout tracker.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		// Do Stuff Here
 		fmt.Println("Hello from Cobra!")
 		fmt.Println("Config path:", viper.ConfigFileUsed())
 		fmt.Println("Dotfiles path:", viper.GetString("dotfiles.path"))
-
-		cmd.Help()
-		if err := cmd.Help(); err != nil {
-			fmt.Println("Error displaying help:", err)
-			os.Exit(1)
-		}
 	},
 }
 
@@ -39,7 +32,6 @@ func init() {
 }
 
 func initConfig() {
-
 	home, err := os.UserHomeDir()
 	if err != nil {
 		fmt.Println("Failed to get user home directory:", err)
