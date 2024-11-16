@@ -6,10 +6,39 @@ The first problem I want to tackle is that I want to automate some things I have
 
 ## Installation
 
-On Linux I can install the latest version of `utils` by running:
+### Creating a tag
+
+In order to install utils using the command below, I need to create a tag for every new version.
+
+```bash
+git tag v0.0.1
+git push origin v0.0.1
+```
+
+Without the tag, I can't install it using @latest.
+
+### Installing
+
+On Linux I can then install the latest version of `utils` by running:
 
 ```bash
 go install github.com/matkv/utils@latest
 ```
 
+## Configuration
+
 A config file will be created in ~/.config/utils/config.yaml. Or just use the one from the dotfiles repo.
+
+Currently, the config file looks like this:
+
+```yaml
+configType: "windows" # or "archlinux"
+
+windows:
+  dotfiles:
+    path: "Documents/Code/dotfiles"
+
+archlinux:
+  dotfiles:
+    path: ".dotfiles"
+```
