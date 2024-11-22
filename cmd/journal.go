@@ -19,14 +19,13 @@ This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("journal command called")
+		journal.ReadObsidianPathInConfig()
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(journalCmd)
 	journal.Hello()
-
-	journal.ReadObsidianPathInConfig()
 
 	// Here you will define your flags and configuration settings.
 
