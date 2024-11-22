@@ -12,5 +12,5 @@ func Hello() {
 
 func ReadObsidianPathInConfig() {
 	fmt.Println("Reading Obsidian path from config file.")
-	fmt.Println("Dotfiles path:", config.ViperConfig.GetString("obsidian.vaultpath"))
+	fmt.Println("Obsidian path:", config.ViperConfig.GetString("obsidian.vaultpath"))
 }
