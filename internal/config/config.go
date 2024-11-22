@@ -9,6 +9,8 @@ import (
 	"github.com/spf13/viper"
 )
 
+var ViperConfig = viper.GetViper()
+
 //go:embed default.yaml
 var defaultConfig []byte
 

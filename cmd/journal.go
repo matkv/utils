@@ -26,6 +26,8 @@ func init() {
 	rootCmd.AddCommand(journalCmd)
 	journal.Hello()
 
+	journal.ReadObsidianPathInConfig()
+
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command

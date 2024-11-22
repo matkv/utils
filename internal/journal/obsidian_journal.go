@@ -1,7 +1,16 @@
 package journal
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/matkv/utils/internal/config"
+)
 
 func Hello() {
 	fmt.Println("Hello from journal package.")
+}
+
+func ReadObsidianPathInConfig() {
+	fmt.Println("Reading Obsidian path from config file.")
+	fmt.Println("Dotfiles path:", config.ViperConfig.GetString("obsidian.vaultpath"))
 }
