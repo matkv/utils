@@ -1,0 +1,11 @@
+configType: "" # "windows" or "archlinux"
+
+windows:
+  dotfiles:
+    path: ""
+  obsidian:
+    vaultpath: ""
+
+archlinux:
+  dotfiles:
+    path: ""
