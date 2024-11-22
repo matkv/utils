@@ -49,7 +49,7 @@ func initConfig() {
 		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
 			createConfigFile(configPath)
 		} else {
-			fmt.Println("Failed to read config file:", err)
+			fmt.Printf("Failed to read config file: %v\n", err)
 			os.Exit(1)
 		}
 	}
