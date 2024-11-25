@@ -4,6 +4,8 @@ A CLI tool to make some common personal tasks easier. For now, this is primarly 
 
 The first problem I want to tackle is that I want to automate some things I have to do manually when editing content for my hugo website.
 
+**Hint**: To create subcommands using `cobra-cli`: (for example creating a command that will be called as `utils hugo markdown-link-checker`) use `cobra-cli add markdown-link-checker -p hugoCmd` - here `hugoCmd` is the parent command.
+
 ## Installation
 
 ### Creating a tag
