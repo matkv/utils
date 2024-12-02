@@ -27,6 +27,12 @@ On Linux I can then install the latest version of `utils` by running:
 go install github.com/matkv/utils@latest
 ```
 
+If I want to install it on the machine I'm currently on this project - in the project directory, I can also just run:
+
+```bash
+go install
+```
+
 ## Configuration
 
 A config file will be created in ~/.config/utils/config.yaml. Or just use the one from the dotfiles repo.
