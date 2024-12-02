@@ -23,3 +23,4 @@ internal/workout-tracker/habitkit-data/habitkit_export.json
 cmd/utils/workout_tracker.html
 internal/hugo-tools/movie-export.csv
 cmd/utils/export/
+internal/scraper/html
