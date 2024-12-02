@@ -2,8 +2,11 @@ package scraper
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"strings"
+
+	"github.com/PuerkitoBio/goquery"
 )
 
 func Hello() {
@@ -12,6 +15,13 @@ func Hello() {
 
 func ScrapeSummaries() {
 	fmt.Println("Scraping summaries from Coppermind.")
+
+	// Clear the file the first time this function runs
+	outputFile := "chapter_title.txt"
+	err := os.WriteFile(outputFile, []byte(""), 0644)
+	if err != nil {
+		log.Fatalf("Failed to clear file: %v", err)
+	}
 
 	// summaries links
 	links := []string{
@@ -42,12 +52,40 @@ func ScrapeSummary(link string) {
 			continue
 		}
 		filePath := dir + "/" + file.Name()
-		content, err := os.ReadFile(filePath)
-		if err != nil {
-			fmt.Println("Error reading file:", filePath, err)
-			continue
-		}
-		fmt.Println("Reading file:", file.Name())
-		fmt.Println(string(content))
+
+		scrapeFile(filePath)
 	}
+}
+
+func scrapeFile(filePath string) {
+	file, err := os.Open(filePath)
+	if err != nil {
+		log.Fatalf("Failed to open file: %v", err)
+	}
+	defer file.Close()
+
+	// Load the HTML document
+	doc, err := goquery.NewDocumentFromReader(file)
+	if err != nil {
+		log.Fatalf("Failed to parse HTML: %v", err)
+	}
+
+	// Open the file in append mode, create if it doesn't exist
+	outputFile := "chapter_title.txt"
+	f, err := os.OpenFile(outputFile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		log.Fatalf("Failed to open file: %v", err)
+	}
+	defer f.Close()
+
+	// Extract and append all chapter titles (h3 tags)
+	doc.Find("h3").Each(func(i int, s *goquery.Selection) {
+		chapterTitle := s.Text()
+		if chapterTitle != "" {
+			if _, err := f.WriteString(fmt.Sprintf("Chapter: %s\n", chapterTitle)); err != nil {
+				log.Fatalf("Failed to write to file: %v", err)
+			}
+			fmt.Printf("Chapter title appended to %s\n", outputFile)
+		}
+	})
 }
