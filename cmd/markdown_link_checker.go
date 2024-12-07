@@ -5,6 +5,7 @@ package cmd
 
 import (
 	"fmt"
+	"os"
 
 	hugotools "github.com/matkv/utils/internal/hugo-tools"
 	"github.com/spf13/cobra"
@@ -22,7 +23,12 @@ This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("markdown-link-checker called")
-		hugotools.Check("test")
+		homeDir, err := os.UserHomeDir()
+		if err != nil {
+			fmt.Println("Error getting home directory:", err)
+			return
+		}
+		hugotools.Check(homeDir + "/documents/Obsidian Vault")
 	},
 }
 
