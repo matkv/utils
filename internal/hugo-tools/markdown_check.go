@@ -1,6 +1,7 @@
 package hugotools
 
 import (
+	"bufio"
 	"fmt"
 	"os"
 	"strings"
@@ -43,5 +44,35 @@ func checkFile(filePath string) {
 	}
 
 	fmt.Println("File opened successfully:", file.Name())
+	printFirst5Lines(file)
+}
 
+func printFirst5Lines(file *os.File) {
+	defer file.Close()
+	scanner := bufio.NewScanner(file)
+	lineCount := 0
+	inFrontMatter := false
+
+	for scanner.Scan() {
+		line := scanner.Text()
+
+		if strings.TrimSpace(line) == "---" {
+			inFrontMatter = !inFrontMatter
+			continue
+		}
+
+		if inFrontMatter {
+			continue
+		}
+
+		fmt.Println(line)
+		lineCount++
+		if lineCount >= 5 {
+			break
+		}
+	}
+
+	if err := scanner.Err(); err != nil {
+		fmt.Println("Error reading file:", err)
+	}
 }
