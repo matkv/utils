@@ -1,10 +1,18 @@
 module github.com/matkv/utils
 
-go 1.22.1
+go 1.23
+
+toolchain go1.23.3
 
 require github.com/charmbracelet/bubbles v0.20.0
 
 require (
+	github.com/andybalholm/cascadia v1.3.2 // indirect
+	golang.org/x/net v0.29.0 // indirect
+)
+
+require (
+	github.com/PuerkitoBio/goquery v1.10.0
 	github.com/atotto/clipboard v0.1.4 // indirect
 	github.com/aymanbagabas/go-osc52/v2 v2.0.1 // indirect
 	github.com/charmbracelet/bubbletea v1.1.2 // indirect
@@ -42,7 +50,7 @@ require (
 	golang.org/x/lint v0.0.0-20210508222113-6edffad5e616 // indirect
 	golang.org/x/sync v0.8.0 // indirect
 	golang.org/x/sys v0.26.0 // indirect
-	golang.org/x/text v0.14.0 // indirect
+	golang.org/x/text v0.18.0 // indirect
 	golang.org/x/tools v0.25.0 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
