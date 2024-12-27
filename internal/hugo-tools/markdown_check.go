@@ -50,7 +50,6 @@ func checkFile(filePath string) {
 		return
 	}
 
-	fmt.Println("File opened successfully:", file.Name())
 	// printFirst5Lines(file)
 	findAndPrintLinks(file)
 }
