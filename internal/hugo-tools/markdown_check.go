@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"regexp"
 	"strings"
 )
 
@@ -24,9 +25,15 @@ func checkFilesInDirectory(path string) {
 		return
 	}
 	for _, file := range files {
-		if file.IsDir() || !strings.HasSuffix(file.Name(), ".md") {
+		if file.IsDir() {
+			checkFilesInDirectory(path + "/" + file.Name())
 			continue
 		}
+
+		if !strings.HasSuffix(file.Name(), ".md") {
+			continue
+		}
+
 		filePath := path + "/" + file.Name()
 
 		checkFile(filePath)
@@ -44,7 +51,8 @@ func checkFile(filePath string) {
 	}
 
 	fmt.Println("File opened successfully:", file.Name())
-	printFirst5Lines(file)
+	// printFirst5Lines(file)
+	findAndPrintLinks(file)
 }
 
 func printFirst5Lines(file *os.File) {
@@ -69,6 +77,25 @@ func printFirst5Lines(file *os.File) {
 		lineCount++
 		if lineCount >= 5 {
 			break
+		}
+	}
+
+	if err := scanner.Err(); err != nil {
+		fmt.Println("Error reading file:", err)
+	}
+}
+
+func findAndPrintLinks(file *os.File) {
+	scanner := bufio.NewScanner(file)
+	linkRegex := regexp.MustCompile(`\[(.*?)\]\((.*?)\)`)
+
+	for scanner.Scan() {
+		line := scanner.Text()
+		matches := linkRegex.FindAllStringSubmatch(line, -1)
+		for _, match := range matches {
+			if len(match) > 2 {
+				fmt.Printf("Text: %s, URL: %s\n", match[1], match[2])
+			}
 		}
 	}
 

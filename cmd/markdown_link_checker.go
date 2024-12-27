@@ -28,7 +28,7 @@ to quickly create a Cobra application.`,
 			fmt.Println("Error getting home directory:", err)
 			return
 		}
-		hugotools.Check(homeDir + "/documents/Obsidian Vault")
+		hugotools.Check(homeDir + "/code/matkv.dev")
 	},
 }
 
