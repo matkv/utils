@@ -71,7 +71,8 @@ func (m model) View() string {
 	if m.executing {
 		return m.output
 	}
-	return "Select a command:\n" + m.list.View() + "\n[q] Quit"
+
+	return m.list.View()
 }
 
 func RunTUI(rootCmd *cobra.Command) {
@@ -85,6 +86,8 @@ func RunTUI(rootCmd *cobra.Command) {
 
 	cmdList := list.New(items, list.NewDefaultDelegate(), 50, 20)
 	cmdList.Title = "Available Commands"
+	cmdList.SetShowPagination(false)       // Disable pagination display
+	cmdList.Paginator.PerPage = len(items) // Show all items on one page
 
 	m := model{list: cmdList}
 	p := tea.NewProgram(m)
