@@ -69,8 +69,8 @@ func createConfigFile(configPath string) {
 }
 
 func PrintSettings() {
-	fmt.Println("Config path:", viper.ConfigFileUsed())
-	fmt.Println("Dotfiles path:", viper.GetString("dotfiles.path"))
+	// fmt.Println("Config path:", viper.ConfigFileUsed())
+	// fmt.Println("Dotfiles path:", viper.GetString("dotfiles.path"))
 
-	fmt.Println("Config built.")
+	// fmt.Println("Config built.")
 }

@@ -61,7 +61,7 @@ type HabitKitData struct {
 var data HabitKitData
 
 func Hello() {
-	fmt.Println("Hello from workout tracker!")
+	// fmt.Println("Hello from workout tracker!")
 }
 
 func GenerateWorkoutGraph() {

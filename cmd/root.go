@@ -26,6 +26,5 @@ func Execute() {
 }
 
 func init() {
-	fmt.Println("Initializing configuration...")
 	cobra.OnInitialize(config.InitConfig)
 }

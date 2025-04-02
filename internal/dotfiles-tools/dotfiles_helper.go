@@ -24,7 +24,7 @@ func init() {
 }
 
 func Hello() {
-	fmt.Println("Hello from dotfiles tools.")
+	// fmt.Println("Hello from dotfiles tools.")
 }
 
 func PullLatesDotfiles() {

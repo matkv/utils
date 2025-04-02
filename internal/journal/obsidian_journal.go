@@ -7,7 +7,7 @@ import (
 )
 
 func Hello() {
-	fmt.Println("Hello from journal package.")
+	// fmt.Println("Hello from journal package.")
 }
 
 func ReadObsidianPathInConfig() {

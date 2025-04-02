@@ -9,7 +9,7 @@ import (
 )
 
 func Hello() {
-	fmt.Println("Hello from Hugo tools!")
+	// fmt.Println("Hello from Hugo tools!")
 }
 
 func UpdateBookreviews(directory string) error {

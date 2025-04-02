@@ -10,7 +10,7 @@ import (
 )
 
 func Hello() {
-	fmt.Println("Hello from scraper package.")
+	// fmt.Println("Hello from scraper package.")
 }
 
 func ScrapeSummaries() {
