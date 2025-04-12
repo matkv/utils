@@ -14,7 +14,7 @@ var rootCmd = &cobra.Command{
 	Short: "CLI tool to automate some personal tasks",
 	Long:  `CLI tool to automate some personal tasks. Some of the tasks include managing dotfiles, managing my hugo website and updating my workout tracker.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("root command called")
+		cmd.Help()
 	},
 }
 
