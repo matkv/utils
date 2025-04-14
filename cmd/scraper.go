@@ -13,13 +13,8 @@ import (
 // scraperCmd represents the scraper command
 var scraperCmd = &cobra.Command{
 	Use:   "scraper",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "Scrape Stormlight Archive summaries from the wiki",
+	Long:  `Scrape Stormlight Archive summaries from the wiki.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("scraper called")
 		scraper.ScrapeSummaries()
