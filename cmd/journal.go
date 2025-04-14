@@ -14,14 +14,12 @@ var journalCmd = &cobra.Command{
 	Long:  `Create journal entries in my Obsidian vault. Usage: utils journal "Went for a run"`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("journal command called")
-		journal.ReadObsidianPathInConfig()
+		journal.CreateJournalEntry()
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(journalCmd)
-	journal.Hello()
-
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
