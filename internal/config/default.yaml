@@ -1,4 +1,4 @@
-configType: "" # "windows" or "archlinux"
+configType: "" # "windows" or "linux"
 
 windows:
   dotfiles:
@@ -6,6 +6,6 @@ windows:
   obsidian:
     vaultpath: ""
 
-archlinux:
+linux:
   dotfiles:
     path: ""

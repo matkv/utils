@@ -40,7 +40,7 @@ A config file will be created in ~/.config/utils/config.yaml. Or just use the on
 Currently, the config file looks like this:
 
 ```yaml
-configType: "" # "windows" or "archlinux"
+configType: "" # "windows" or "linux"
 
 windows:
   dotfiles:
@@ -48,7 +48,7 @@ windows:
   obsidian:
     vaultpath: ""
 
-archlinux:
+linux:
   dotfiles:
     path: ""
 ```
