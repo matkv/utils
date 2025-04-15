@@ -38,11 +38,40 @@ func openEditor() {
 		cmd.Stdin = os.Stdin
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
-		err := cmd.Run()
+
+		// Create a temporary file
+		tmpFile, err := os.CreateTemp("", "journal_*.md")
 		if err != nil {
-			fmt.Println("Error opening Neovim:", err)
+			fmt.Println("Error creating temporary file:", err)
 			return
 		}
+		defer os.Remove(tmpFile.Name())             // Clean up the temporary file after use
+		cmd.Args = append(cmd.Args, tmpFile.Name()) // Pass the temporary file to Neovim
+		fmt.Println("Temporary file created:", tmpFile.Name())
+		// Open Neovim with the temporary file
+		err = cmd.Start()
+		if err != nil {
+			fmt.Println("Error starting Neovim:", err)
+			return
+		}
+		fmt.Println("Neovim editor opened. Please write your journal entry.")
+
+		err = cmd.Wait()
+		if err != nil {
+			fmt.Println("Error waiting for Neovim to close:", err)
+			return
+		}
+
+		// Read the content of the temporary file
+		content, err := os.ReadFile(tmpFile.Name())
+		if err != nil {
+			fmt.Println("Error reading temporary file:", err)
+			return
+		}
+
+		fmt.Println("Journal entry content:")
+		fmt.Println(string(content))
+
 		fmt.Println("Neovim editor closed.")
 
 	}
