@@ -88,10 +88,36 @@ func checkObsidianJournalDirectory() bool {
 		return false
 	}
 
-	currentWeekFile := createCurrentWeekFilepath()
-	fmt.Println("Current week file path:", filepath.Join(journalMonthDirectory, currentWeekFile))
+	currentWeekFile := filepath.Join(journalMonthDirectory, createCurrentWeekFilepath())
 
-	return false
+	if _, err := os.Stat(currentWeekFile); os.IsNotExist(err) {
+		fmt.Println("Current week file does not exist.")
+		fmt.Println("Creating new file:", currentWeekFile)
+		// Create the file if it doesn't exist
+		file, err := os.Create(currentWeekFile)
+		if err != nil {
+			fmt.Println("Error creating file:", err)
+			return false
+		}
+		defer file.Close()
+
+		fmt.Println("Current week file created at:", currentWeekFile)
+		// Write a header or any initial content to the file
+		header := fmt.Sprintf("# Journal Entry for Week %s\n\n", time.Now().Format("2006-01-02"))
+		_, err = file.WriteString(header)
+		if err != nil {
+			fmt.Println("Error writing to file:", err)
+			return false
+		}
+		return true
+
+	}
+
+	// TODO
+	// Check content of file from top to bottom, create header if necessary, create subheader for
+	// current day if necessary, and add content to the file.
+
+	return true
 }
 
 func createCurrentWeekFilepath() string {
