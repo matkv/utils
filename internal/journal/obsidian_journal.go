@@ -4,6 +4,9 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"path/filepath"
+	"strings"
+	"time"
 
 	"github.com/matkv/utils/internal/config"
 )
@@ -14,12 +17,14 @@ const (
 	ConfigTypeWindows = "windows"
 )
 
+var JournalEntry Journal
+
 type Journal struct {
 	ObsidianPath string
 }
 
 func CreateJournalEntry() {
-	JournalEntry := Journal{
+	JournalEntry = Journal{
 		ObsidianPath: config.ViperConfig.GetString("obsidian.vaultpath"),
 	}
 	fmt.Println("Creating a journal entry.")
@@ -41,7 +46,9 @@ func openEditor() {
 	}
 
 	if operatingSystem == ConfigTypeLinux {
-		createJournalEntryLinux()
+		if checkObsidianJournalDirectory() {
+			createJournalEntryLinux()
+		}
 	} else if operatingSystem == ConfigTypeWindows {
 		fmt.Println("Opening Windows editor.")
 	}
@@ -56,6 +63,43 @@ func createJournalEntryLinux() {
 
 	fmt.Println("Journal entry content:")
 	fmt.Println(string(content))
+}
+
+func checkObsidianJournalDirectory() bool {
+	journalDirectory := filepath.Join(JournalEntry.ObsidianPath, "journal")
+	if _, err := os.Stat(journalDirectory); os.IsNotExist(err) {
+		fmt.Println("Journal directory does not exist.")
+		return false
+	}
+
+	currentYear := fmt.Sprintf("%d", time.Now().Year())
+	journalYearDirectory := filepath.Join(journalDirectory, currentYear)
+
+	if _, err := os.Stat(journalYearDirectory); os.IsNotExist(err) {
+		fmt.Println("Year directory does not exist.")
+		return false
+	}
+
+	currentMonth := time.Now().Format("January")
+	currentMonth = strings.ToLower(currentMonth)
+	journalMonthDirectory := filepath.Join(journalYearDirectory, currentMonth)
+	if _, err := os.Stat(journalMonthDirectory); os.IsNotExist(err) {
+		fmt.Println("Month directory does not exist.")
+		return false
+	}
+
+	currentWeekFile := createCurrentWeekFilepath()
+	fmt.Println("Current week file path:", filepath.Join(journalMonthDirectory, currentWeekFile))
+
+	return false
+}
+
+func createCurrentWeekFilepath() string {
+	now := time.Now()
+	year, week := now.ISOWeek()
+	month := now.Format("01") // zero-padded month
+
+	return fmt.Sprintf("%d-%s-W%02d.md", year, month, week)
 }
 
 func writeEntryInNeovim() ([]byte, bool) {
