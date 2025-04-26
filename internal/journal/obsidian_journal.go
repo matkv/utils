@@ -17,20 +17,24 @@ const (
 	ConfigTypeWindows = "windows"
 )
 
-var JournalEntry Journal
+var JournalEntry Journal // this is public, should be private
 
-type Journal struct {
+type Journal struct { // this i guess should also be private
 	ObsidianPath string
 }
 
-func CreateJournalEntry() {
+var arguments []string
+
+func CreateJournalEntry(args []string) {
 	JournalEntry = Journal{
 		ObsidianPath: config.ViperConfig.GetString("obsidian.vaultpath"),
 	}
 	fmt.Println("Creating a journal entry.")
 	fmt.Println("Obsidian path:", JournalEntry.ObsidianPath)
 
-	openEditor()
+	arguments = args
+
+	setupForJournalEntryCreation()
 }
 
 func getOperatingSystem() string {
@@ -38,7 +42,7 @@ func getOperatingSystem() string {
 	return operatingSystem
 }
 
-func openEditor() {
+func setupForJournalEntryCreation() {
 	operatingSystem := getOperatingSystem()
 	if operatingSystem == "" {
 		fmt.Println("No operating system specified. Cannot open editor.")
@@ -47,11 +51,49 @@ func openEditor() {
 
 	if operatingSystem == ConfigTypeLinux {
 		if checkObsidianJournalDirectory() {
-			createJournalEntryLinux()
+			if len(arguments) > 0 {
+				fmt.Println("Arguments provided:", arguments)
+				appendToCurrentWeekFile(arguments)
+			} else {
+				createJournalEntryLinux()
+			}
 		}
 	} else if operatingSystem == ConfigTypeWindows {
 		fmt.Println("Opening Windows editor.")
 	}
+}
+
+func appendToCurrentWeekFile(arguments []string) {
+	currentWeekFile := getCurrentWeekFilepath()
+	fmt.Println("Appending to current week file:", currentWeekFile)
+
+	// Open the file in append mode
+	file, err := os.OpenFile(currentWeekFile, os.O_APPEND|os.O_WRONLY, 0644)
+	if err != nil {
+		fmt.Println("Error opening file:", err)
+		return
+	}
+	defer file.Close()
+
+	// Combine the arguments into a single sentence and write to the file
+	sentence := strings.Join(arguments, " ") + "\n"
+	_, err = file.WriteString(sentence)
+	if err != nil {
+		fmt.Println("Error writing to file:", err)
+		return
+	}
+
+	fmt.Println("Arguments appended to current week file.")
+}
+
+func getCurrentWeekFilepath() string {
+	journalDirectory := filepath.Join(JournalEntry.ObsidianPath, "journal")
+	currentYear := fmt.Sprintf("%d", time.Now().Year())
+	currentMonth := time.Now().Format("January")
+	currentMonth = strings.ToLower(currentMonth)
+	currentWeekFile := filepath.Join(journalDirectory, currentYear, currentMonth, createCurrentWeekFilepath())
+
+	return currentWeekFile
 }
 
 func createJournalEntryLinux() {
@@ -76,7 +118,8 @@ func checkObsidianJournalDirectory() bool {
 	journalYearDirectory := filepath.Join(journalDirectory, currentYear)
 
 	if _, err := os.Stat(journalYearDirectory); os.IsNotExist(err) {
-		fmt.Println("Year directory does not exist.")
+		os.Mkdir(journalYearDirectory, os.ModePerm)
+		fmt.Println("Year directory did not exist. Created:", journalYearDirectory)
 		return false
 	}
 
@@ -84,7 +127,8 @@ func checkObsidianJournalDirectory() bool {
 	currentMonth = strings.ToLower(currentMonth)
 	journalMonthDirectory := filepath.Join(journalYearDirectory, currentMonth)
 	if _, err := os.Stat(journalMonthDirectory); os.IsNotExist(err) {
-		fmt.Println("Month directory does not exist.")
+		os.Mkdir(journalMonthDirectory, os.ModePerm)
+		fmt.Println("Month directory did not exist. Created:", journalMonthDirectory)
 		return false
 	}
 
@@ -113,9 +157,14 @@ func checkObsidianJournalDirectory() bool {
 
 	}
 
-	// TODO
-	// Check content of file from top to bottom, create header if necessary, create subheader for
-	// current day if necessary, and add content to the file.
+	// TODO decide if i want to actually also create the directories if they don't exist
+
+	// TODO easier options, if it's completely empty add the header
+	// otherwise just open the file directly in neovim? or still have some logic with appending? think about it
+
+	// IDEA
+	// if i pass more words / a sentence to the command, like utils journal "went for a run", just append that sentence directly to the file. So basically still
+	// checking if the files exist but not opening neovim. Otherwise, if i pass no words, open neovim and do the normal version
 
 	return true
 }
