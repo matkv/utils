@@ -147,7 +147,8 @@ func checkObsidianJournalDirectory() bool {
 
 		fmt.Println("Current week file created at:", currentWeekFile)
 		// Write a header or any initial content to the file
-		header := fmt.Sprintf("# Journal Entry for Week %s\n\n", time.Now().Format("2006-01-02"))
+		year, week := time.Now().ISOWeek()
+		header := fmt.Sprintf("# %s %d - Week %02d\n\n", time.Now().Format("January"), year, week)
 		_, err = file.WriteString(header)
 		if err != nil {
 			fmt.Println("Error writing to file:", err)
