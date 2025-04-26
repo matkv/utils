@@ -153,6 +153,12 @@ func checkObsidianJournalDirectory() bool {
 			fmt.Println("Error writing to file:", err)
 			return false
 		}
+
+		if err := addDailySubheaderIfMissing(currentWeekFile); err != nil {
+			fmt.Println("Error adding daily subheader:", err)
+			return false
+		}
+
 		return true
 
 	}
