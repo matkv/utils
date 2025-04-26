@@ -149,8 +149,7 @@ func checkObsidianJournalDirectory() bool {
 		// Write a header or any initial content to the file
 		year, week := time.Now().ISOWeek()
 		header := fmt.Sprintf("# %s %d - Week %02d\n\n", time.Now().Format("January"), year, week)
-		_, err = file.WriteString(header)
-		if err != nil {
+		if _, err := file.WriteString(header); err != nil {
 			fmt.Println("Error writing to file:", err)
 			return false
 		}
@@ -158,14 +157,10 @@ func checkObsidianJournalDirectory() bool {
 
 	}
 
-	// TODO decide if i want to actually also create the directories if they don't exist
-
-	// TODO easier options, if it's completely empty add the header
-	// otherwise just open the file directly in neovim? or still have some logic with appending? think about it
-
-	// IDEA
-	// if i pass more words / a sentence to the command, like utils journal "went for a run", just append that sentence directly to the file. So basically still
-	// checking if the files exist but not opening neovim. Otherwise, if i pass no words, open neovim and do the normal version
+	if err := addDailySubheaderIfMissing(currentWeekFile); err != nil {
+		fmt.Println("Error adding daily subheader:", err)
+		return false
+	}
 
 	return true
 }
@@ -213,4 +208,35 @@ func writeEntryInNeovim() ([]byte, bool) {
 		return nil, false
 	}
 	return content, true
+}
+
+func addDailySubheaderIfMissing(filePath string) error {
+	currentDate := time.Now().Format("Monday, 02.01")
+	subheader := fmt.Sprintf("## %s\n\n", currentDate)
+
+	fileContent, err := os.ReadFile(filePath)
+	if err != nil {
+		fmt.Println("Error reading file:", err)
+		return err
+	}
+
+	if !strings.Contains(string(fileContent), subheader) {
+		file, err := os.OpenFile(filePath, os.O_APPEND|os.O_WRONLY, 0644)
+		if err != nil {
+			fmt.Println("Error opening file for appending:", err)
+			return err
+		}
+		defer file.Close()
+
+		_, err = file.WriteString(subheader)
+		if err != nil {
+			fmt.Println("Error writing subheader to file:", err)
+			return err
+		}
+		fmt.Println("Subheader added to file:", subheader)
+	} else {
+		fmt.Println("Subheader already exists in file:", subheader)
+	}
+
+	return nil
 }
