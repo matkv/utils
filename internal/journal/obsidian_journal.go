@@ -55,7 +55,7 @@ func setupForJournalEntryCreation() {
 				fmt.Println("Arguments provided:", arguments)
 				appendToCurrentWeekFile(arguments)
 			} else {
-				createJournalEntryLinux()
+				openJournalEntryInNeovim()
 			}
 		}
 	} else if operatingSystem == ConfigTypeWindows {
@@ -96,7 +96,7 @@ func getCurrentWeekFilepath() string {
 	return currentWeekFile
 }
 
-func createJournalEntryLinux() {
+func openJournalEntryInNeovim() {
 	content, success := writeEntryInNeovim()
 	if !success {
 		fmt.Println("Failed to write journal entry in Neovim.")
@@ -186,18 +186,13 @@ func writeEntryInNeovim() ([]byte, bool) {
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 
-	// Create a temporary file
-	tmpFile, err := os.CreateTemp("", "journal_*.md")
-	if err != nil {
-		fmt.Println("Error creating temporary file:", err)
-		return nil, false
-	}
-	defer os.Remove(tmpFile.Name())             // Clean up the temporary file after use
-	cmd.Args = append(cmd.Args, tmpFile.Name()) // Pass the temporary file to Neovim
-	fmt.Println("Temporary file created:", tmpFile.Name())
+	// Get the current week file path
+	currentWeekFile := getCurrentWeekFilepath()
+	cmd.Args = append(cmd.Args, currentWeekFile) // Pass the current week file to Neovim
+	fmt.Println("Opening current week file in Neovim:", currentWeekFile)
 
-	// Open Neovim with the temporary file
-	err = cmd.Start()
+	// Open Neovim with the current week file
+	err := cmd.Start()
 	if err != nil {
 		fmt.Println("Error starting Neovim:", err)
 		return nil, false
@@ -210,10 +205,10 @@ func writeEntryInNeovim() ([]byte, bool) {
 		return nil, false
 	}
 
-	// Read the content of the temporary file
-	content, err := os.ReadFile(tmpFile.Name())
+	// Read the content of the current week file
+	content, err := os.ReadFile(currentWeekFile)
 	if err != nil {
-		fmt.Println("Error reading temporary file:", err)
+		fmt.Println("Error reading current week file:", err)
 		return nil, false
 	}
 	return content, true
