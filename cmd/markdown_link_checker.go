@@ -15,7 +15,6 @@ var markdownLinkCheckerCmd = &cobra.Command{
 	Long: `Checks all markdown links in my hugo matkv.dev website.
 	Usage: utils hugo markdown-link-checker`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("markdown-link-checker called")
 		homeDir, err := os.UserHomeDir()
 		if err != nil {
 			fmt.Println("Error getting home directory:", err)

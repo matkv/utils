@@ -23,10 +23,6 @@ func init() {
 	}
 }
 
-func Hello() {
-	// fmt.Println("Hello from dotfiles tools.")
-}
-
 func PullLatesDotfiles() {
 
 	if dotfilesDirectoryExists(config.DotfilesPath) {

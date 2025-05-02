@@ -45,7 +45,6 @@ func InitConfig() {
 	}
 
 	viper.MergeConfigMap(settings.AllSettings())
-	PrintSettings()
 }
 
 func createConfigFile(configPath string) {
@@ -66,11 +65,4 @@ func createConfigFile(configPath string) {
 		fmt.Println("Failed to write default config to file:", err)
 		os.Exit(1)
 	}
-}
-
-func PrintSettings() {
-	// fmt.Println("Config path:", viper.ConfigFileUsed())
-	// fmt.Println("Dotfiles path:", viper.GetString("dotfiles.path"))
-
-	// fmt.Println("Config built.")
 }

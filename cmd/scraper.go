@@ -1,8 +1,6 @@
 package cmd
 
 import (
-	"fmt"
-
 	"github.com/matkv/utils/internal/scraper"
 	"github.com/spf13/cobra"
 )
@@ -13,7 +11,6 @@ var scraperCmd = &cobra.Command{
 	Short: "Scrape Stormlight Archive summaries from the wiki",
 	Long:  `Scrape Stormlight Archive summaries from the wiki.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("scraper called")
 		scraper.ScrapeSummaries()
 	},
 }

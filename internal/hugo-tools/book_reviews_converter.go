@@ -8,10 +8,6 @@ import (
 	"strings"
 )
 
-func Hello() {
-	// fmt.Println("Hello from Hugo tools!")
-}
-
 func UpdateBookreviews(directory string) error {
 	cwd, err := os.Getwd()
 	if err != nil {
