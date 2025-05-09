@@ -1,25 +1,17 @@
 # Utils
 
-A CLI tool to make some common personal tasks easier. For now, this is primarly a practice project to learn Go using some real-life problems. Ideally this tool will become some sort of personal "pocket-knife" that helps me automate some day to day tasks - especially since Go allows to build any program as a single static binary so I should be able to run it anywhere I need it without any set-up process.
+<p align="center">
+  <img src="https://img.shields.io/github/go-mod/go-version/matkv/utils" alt="Go Version">
+  <img src="https://img.shields.io/github/license/matkv/utils" alt="License">
+  <img src="https://img.shields.io/github/last-commit/matkv/utils" alt="Last Commit">
+  <a href="https://pkg.go.dev/github.com/matkv/utils">
+    <img src="https://pkg.go.dev/badge/github.com/matkv/utils.svg" alt="Go Reference">
+  </a>
+</p>
 
-The first problem I want to tackle is that I want to automate some things I have to do manually when editing content for my hugo website.
-
-**Hint**: To create subcommands using `cobra-cli`: (for example creating a command that will be called as `utils hugo markdown-link-checker`) use `cobra-cli add markdown-link-checker -p hugoCmd` - here `hugoCmd` is the parent command.
+A CLI tool to make some common personal tasks easier & a practice project for learning Go.
 
 ## Installation
-
-### Creating a tag
-
-In order to install utils using the command below, I need to create a tag for every new version.
-
-```bash
-git tag v0.0.1
-git push origin v0.0.1
-```
-
-Without the tag, I can't install it using @latest.
-
-### Installing
 
 On Linux I can then install the latest version of `utils` by running:
 
@@ -52,3 +44,20 @@ linux:
   dotfiles:
     path: ""
 ```
+
+## Additional info
+
+### Creating a tag
+
+In order to install utils using the command below, I need to create a tag for every new version.
+
+```bash
+git tag v0.0.1
+git push origin v0.0.1
+```
+
+Without the tag, I can't install it using @latest.
+
+### Cobra-CLI commands
+
+To create subcommands using `cobra-cli`: (for example creating a command that will be called as `utils hugo markdown-link-checker`) use `cobra-cli add markdown-link-checker -p hugoCmd` - here `hugoCmd` is the parent command.
