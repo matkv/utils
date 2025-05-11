@@ -2,14 +2,47 @@ package browser
 
 import (
 	"fmt"
+	"os"
+	"path/filepath"
+	"strings"
 
+	"github.com/matkv/utils/internal/config"
 	"github.com/pkg/browser"
 )
 
 func OpenURLS(urls []string) {
 	// Check if the user has provided any URLs
 	if len(urls) == 0 {
-		fmt.Println("Please provide at least one URL to open.")
+		// open urls in a text file in the config directory
+		configPath := config.ViperConfig.ConfigFileUsed()
+		configDir := filepath.Dir(configPath)
+
+		urlsFile := filepath.Join(configDir, "urls.txt")
+
+		// Read the file and get all URLs
+		fileContent, err := os.ReadFile(urlsFile)
+		if err != nil {
+			fmt.Printf("Error reading file %s: %v\n", urlsFile, err)
+			return
+		}
+
+		// Split the file content into lines (URLs)
+		lines := strings.Split(string(fileContent), "\n")
+		for _, line := range lines {
+			url := strings.TrimSpace(line)
+			if len(url) == 0 {
+				continue
+			}
+
+			// Open each URL
+			if err := openURL(url); err != nil {
+				fmt.Printf("Error opening URL %s: %v\n", url, err)
+			} else {
+				fmt.Printf("Opened URL: %s\n", url)
+			}
+		}
+
+		fmt.Println("Config directory:", configDir)
 		return
 	}
 	// Iterate over the provided URLs and open each one
