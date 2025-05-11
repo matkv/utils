@@ -48,17 +48,6 @@ func OpenURLS(urls []string) {
 	// Iterate over the provided URLs and open each one
 	for _, url := range urls {
 
-		// Check if the URL is valid
-		if len(url) == 0 {
-			fmt.Println("Empty URL provided. Skipping...")
-			continue
-		}
-
-		// append https:// if the URL doesn't start with http:// or https://
-		if !(len(url) >= 7 && (url[:7] == "http://" || url[:8] == "https://")) {
-			url = "https://" + url
-		}
-
 		if err := openURL(url); err != nil {
 			fmt.Printf("Error opening URL %s: %v\n", url, err)
 		} else {
@@ -68,6 +57,12 @@ func OpenURLS(urls []string) {
 }
 
 func openURL(url string) error {
+
+	// append https:// if the URL doesn't start with http:// or https://
+	if !(len(url) >= 7 && (url[:7] == "http://" || url[:8] == "https://")) {
+		url = "https://" + url
+	}
+
 	if err := browser.OpenURL(url); err != nil {
 		return fmt.Errorf("failed to open URL %s: %w", url, err)
 	}
