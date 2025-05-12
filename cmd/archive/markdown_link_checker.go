@@ -20,7 +20,7 @@ var MarkdownLinkCheckerCmd = &cobra.Command{
 			fmt.Println("Error getting home directory:", err)
 			return
 		}
-		hugotools.Check(homeDir + "/code/matkv.dev/") // TODO load this path from config
+		hugotools.Check(homeDir + "/code/matkv.dev/")
 	},
 }
 
