@@ -1,7 +1,7 @@
 package archive
 
 import (
-	workouttracker "github.com/matkv/utils/internal/workout-tracker"
+	workouttracker "github.com/matkv/utils/internal/archive/workout-tracker"
 	"github.com/spf13/cobra"
 )
 

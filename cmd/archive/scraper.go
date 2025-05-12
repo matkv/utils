@@ -1,7 +1,7 @@
 package archive
 
 import (
-	"github.com/matkv/utils/internal/scraper"
+	"github.com/matkv/utils/internal/archive/scraper"
 	"github.com/spf13/cobra"
 )
 

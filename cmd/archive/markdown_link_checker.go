@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	hugotools "github.com/matkv/utils/internal/hugo-tools"
+	hugotools "github.com/matkv/utils/internal/archive/hugo-tools"
 	"github.com/spf13/cobra"
 )
 
