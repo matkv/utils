@@ -1,4 +1,4 @@
-package cmd
+package archive
 
 import (
 	"fmt"
@@ -8,12 +8,12 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// markdownLinkCheckerCmd represents the markdownLinkChecker command
-var markdownLinkCheckerCmd = &cobra.Command{
+var MarkdownLinkCheckerCmd = &cobra.Command{
 	Use:   "markdown-link-checker",
 	Short: "Checks all markdown links in my hugo matkv.dev website",
 	Long: `Checks all markdown links in my hugo matkv.dev website.
 	Usage: utils hugo markdown-link-checker`,
+	Hidden: true,
 	Run: func(cmd *cobra.Command, args []string) {
 		homeDir, err := os.UserHomeDir()
 		if err != nil {
@@ -25,6 +25,6 @@ var markdownLinkCheckerCmd = &cobra.Command{
 }
 
 func init() {
-	hugoCmd.AddCommand(markdownLinkCheckerCmd)
-
+	// Add this command to the HugoCmd within the same 'archive' package
+	HugoCmd.AddCommand(MarkdownLinkCheckerCmd)
 }
