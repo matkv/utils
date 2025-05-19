@@ -10,7 +10,8 @@
       "console": "integratedTerminal",
       "cwd": "${workspaceFolder}",
       "env": {},
-      "args": ["journal", "Read", "a", "book", "and", "went", "to", "the", "store"],
+      "args": ["-t"],
+      "output": "${workspaceFolder}/bin/utils"
     }
   ]
 }
