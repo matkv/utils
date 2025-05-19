@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/matkv/utils/internal/config"
+	"github.com/matkv/utils/config"
 )
 
 const (

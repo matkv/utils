@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/matkv/utils/internal/config"
+	"github.com/matkv/utils/config"
 	"github.com/spf13/cobra"
 )
 

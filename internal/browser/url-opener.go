@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/matkv/utils/internal/config"
+	"github.com/matkv/utils/config"
 	"github.com/pkg/browser"
 )
 
