@@ -8,10 +8,12 @@ require github.com/charmbracelet/bubbles v0.20.0
 
 require (
 	github.com/andybalholm/cascadia v1.3.2 // indirect
+	github.com/godbus/dbus/v5 v5.1.0 // indirect
 	golang.org/x/net v0.29.0 // indirect
 )
 
 require (
+	fyne.io/systray v1.11.0
 	github.com/PuerkitoBio/goquery v1.10.0
 	github.com/atotto/clipboard v0.1.4 // indirect
 	github.com/aymanbagabas/go-osc52/v2 v2.0.1 // indirect
