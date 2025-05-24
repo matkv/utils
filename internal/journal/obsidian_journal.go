@@ -218,7 +218,7 @@ func writeEntryInNeovim() ([]byte, bool) {
 
 func addDailySubheaderIfMissing(filePath string) error {
 	currentDate := time.Now().Format("Monday, 02.01")
-	subheader := fmt.Sprintf("## %s\n\n", currentDate)
+	subheader := fmt.Sprintf("\n\n## %s\n\n", currentDate)
 
 	fileContent, err := os.ReadFile(filePath)
 	if err != nil {
