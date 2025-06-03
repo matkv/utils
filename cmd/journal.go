@@ -11,6 +11,8 @@ var journalCmd = &cobra.Command{
 	Use:   "journal",
 	Short: "Create journal entries in my Obsidian vault",
 	Long:  `Create journal entries in my Obsidian vault. Usage: utils journal "Went for a run"`,
+	Annotations: map[string]string{
+		"IsLinuxOnly": "true"},
 	Run: func(cmd *cobra.Command, args []string) {
 		journal.CreateJournalEntry(args)
 	},
