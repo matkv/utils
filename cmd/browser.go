@@ -12,6 +12,9 @@ var browserCmd = &cobra.Command{
 	Use:   "browser",
 	Short: "Open one or multiple URLs in the default browser",
 	Long:  `Open one or multiple URLs in the default browser.`,
+	Annotations: map[string]string{
+		"IsWindowsOnly": "true",
+	},
 	Run: func(cmd *cobra.Command, args []string) {
 		browser.OpenURLS(args)
 	},
