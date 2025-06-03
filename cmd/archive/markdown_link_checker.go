@@ -13,7 +13,9 @@ var MarkdownLinkCheckerCmd = &cobra.Command{
 	Short: "Checks all markdown links in my hugo matkv.dev website",
 	Long: `Checks all markdown links in my hugo matkv.dev website.
 	Usage: utils hugo markdown-link-checker`,
-	Hidden: true,
+	Annotations: map[string]string{
+		"IsArchived": "true",
+	},
 	Run: func(cmd *cobra.Command, args []string) {
 		homeDir, err := os.UserHomeDir()
 		if err != nil {
