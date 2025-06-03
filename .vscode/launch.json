@@ -10,7 +10,7 @@
       "console": "integratedTerminal",
       "cwd": "${workspaceFolder}",
       "env": {},
-      "args": ["-t"],
+      "args": [""],
       "output": "${workspaceFolder}/bin/utils"
     }
   ]

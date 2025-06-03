@@ -2,6 +2,7 @@ package cmd
 
 import (
 	journal "github.com/matkv/utils/internal/journal"
+	"github.com/matkv/utils/internal/registry"
 	"github.com/spf13/cobra"
 )
 
@@ -16,5 +17,5 @@ var journalCmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.AddCommand(journalCmd)
+	registry.RegisterCommand(journalCmd)
 }

@@ -32,12 +32,14 @@ func Execute() {
 	rootCmd.CompletionOptions.DisableDefaultCmd = true
 	rootCmd.Flags().BoolVarP(&IsTrayMode, "tray", "t", false, "Run in tray mode")
 
-	for _, cmd := range AllCommands {
+	for _, cmd := range GetAllCommands() {
 		isWinOnly, hasWinOnly := cmd.Annotations["IsWindowsOnly"]
 		isLinuxOnly, hasLinuxOnly := cmd.Annotations["IsLinuxOnly"]
+		isArchived, hasArchived := cmd.Annotations["IsArchived"]
 
 		if (config.IsLinux() && hasWinOnly && isWinOnly == "true") ||
-			(config.IsWindows() && hasLinuxOnly && isLinuxOnly == "true") {
+			(config.IsWindows() && hasLinuxOnly && isLinuxOnly == "true") ||
+			(hasArchived && isArchived == "true") {
 			continue
 		}
 

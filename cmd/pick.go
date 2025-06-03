@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/matkv/utils/internal/picker"
+	"github.com/matkv/utils/internal/registry"
 	"github.com/spf13/cobra"
 )
 
@@ -24,5 +25,5 @@ var pickCmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.AddCommand(pickCmd)
+	registry.RegisterCommand(pickCmd)
 }

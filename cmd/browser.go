@@ -2,6 +2,7 @@ package cmd
 
 import (
 	browser "github.com/matkv/utils/internal/browser"
+	"github.com/matkv/utils/internal/registry"
 
 	"github.com/spf13/cobra"
 )
@@ -17,5 +18,5 @@ var browserCmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.AddCommand(browserCmd)
+	registry.RegisterCommand(browserCmd)
 }

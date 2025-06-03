@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"github.com/matkv/utils/internal/registry"
 	"github.com/spf13/cobra"
 )
 
@@ -17,5 +18,5 @@ var dotfilesCmd = &cobra.Command{
 }
 
 func init() {
-	AllCommands = append(AllCommands, dotfilesCmd)
+	registry.RegisterCommand(dotfilesCmd)
 }
