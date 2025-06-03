@@ -26,8 +26,23 @@ var rootCmd = &cobra.Command{
 }
 
 func Execute() {
+
+	config.InitConfig()
+
 	rootCmd.CompletionOptions.DisableDefaultCmd = true
 	rootCmd.Flags().BoolVarP(&IsTrayMode, "tray", "t", false, "Run in tray mode")
+
+	for _, cmd := range AllCommands {
+		isWinOnly, hasWinOnly := cmd.Annotations["IsWindowsOnly"]
+		isLinuxOnly, hasLinuxOnly := cmd.Annotations["IsLinuxOnly"]
+
+		if (config.IsLinux() && hasWinOnly && isWinOnly == "true") ||
+			(config.IsWindows() && hasLinuxOnly && isLinuxOnly == "true") {
+			continue
+		}
+
+		rootCmd.AddCommand(cmd)
+	}
 
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)
@@ -36,5 +51,5 @@ func Execute() {
 }
 
 func init() {
-	cobra.OnInitialize(config.InitConfig)
+	// cobra.OnInitialize(config.InitConfig)
 }

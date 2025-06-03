@@ -9,10 +9,13 @@ var dotfilesCmd = &cobra.Command{
 	Use:   "dotfiles",
 	Short: "Tools to manage my dotfiles.",
 	Long:  `Tools to manage my dotfiles. For example moving dotfiles to the correct location on Windows so I can update my dotfiles git repository more easily.`,
+	Annotations: map[string]string{
+		"IsWindowsOnly": "true",
+	},
 	Run: func(cmd *cobra.Command, args []string) {
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(dotfilesCmd)
+	AllCommands = append(AllCommands, dotfilesCmd)
 }

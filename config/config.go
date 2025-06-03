@@ -66,3 +66,11 @@ func createConfigFile(configPath string) {
 		os.Exit(1)
 	}
 }
+
+func IsLinux() bool {
+	return viper.GetString("configType") == "linux"
+}
+
+func IsWindows() bool {
+	return viper.GetString("configType") == "windows"
+}
