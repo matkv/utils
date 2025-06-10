@@ -10,7 +10,7 @@
       "console": "integratedTerminal",
       "cwd": "${workspaceFolder}",
       "env": {},
-      "args": [""],
+      "args": ["dotfiles", "pull"],
       "output": "${workspaceFolder}/bin/utils"
     }
   ]
