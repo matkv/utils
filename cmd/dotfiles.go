@@ -1,6 +1,9 @@
 package cmd
 
 import (
+	"fmt"
+
+	"github.com/matkv/utils/internal/dotfiles"
 	"github.com/matkv/utils/internal/registry"
 	"github.com/spf13/cobra"
 )
@@ -14,9 +17,49 @@ var dotfilesCmd = &cobra.Command{
 		"IsWindowsOnly": "true",
 	},
 	Run: func(cmd *cobra.Command, args []string) {
+		cmd.Help()
+	},
+}
+
+var syncCmd = &cobra.Command{
+	Use:   "sync",
+	Short: "Sync config files to dotfiles repository",
+	Long:  `Copy configured files from their locations to the dotfiles repository. Ensures the repo is clean and up to date first.`,
+	Run: func(cmd *cobra.Command, args []string) {
+		if err := dotfiles.SyncConfigFiles(); err != nil {
+			fmt.Printf("Error syncing config files: %v\n", err)
+			return
+		}
+		fmt.Println("✓ Config files synced successfully!")
+	},
+}
+
+var statusCmd = &cobra.Command{
+	Use:   "status",
+	Short: "Show dotfiles repository status",
+	Long:  `Display the current git status of the dotfiles repository.`,
+	Run: func(cmd *cobra.Command, args []string) {
+		if err := dotfiles.ShowStatus(); err != nil {
+			fmt.Printf("Error showing status: %v\n", err)
+		}
+	},
+}
+
+var pullCmd = &cobra.Command{
+	Use:   "pull",
+	Short: "Pull latest changes from dotfiles repository",
+	Long:  `Pull the latest changes from the remote dotfiles repository.`,
+	Run: func(cmd *cobra.Command, args []string) {
+		if err := dotfiles.PullLatestDotfiles(); err != nil {
+			fmt.Printf("Error pulling dotfiles: %v\n", err)
+			return
+		}
 	},
 }
 
 func init() {
+	dotfilesCmd.AddCommand(syncCmd)
+	dotfilesCmd.AddCommand(statusCmd)
+	dotfilesCmd.AddCommand(pullCmd)
 	registry.RegisterCommand(dotfilesCmd)
 }

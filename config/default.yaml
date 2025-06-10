@@ -3,6 +3,15 @@ configType: "" # "windows" or "linux"
 windows:
   dotfiles:
     path: ""
+    configfiles:
+      vscode:
+        pathinrepo: ""
+        settings: ""
+        keybindings: ""
+      wezterm:
+        pathinrepo: ""
+        config: ""
+
   obsidian:
     vaultpath: ""
 
